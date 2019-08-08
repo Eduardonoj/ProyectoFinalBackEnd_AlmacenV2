@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{16F06F15-7408-459B-9298-A0488AFB624A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AlmacenV2</RootNamespace>
+    <AssemblyName>AlmacenV2</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ModelView\CategoriaViewModel.cs" />
+    <Compile Include="ModelView\ClienteViewModel.cs" />
+    <Compile Include="ModelView\CompraViewModel.cs" />
+    <Compile Include="ModelView\DetalleCompraViewModel.cs" />
+    <Compile Include="ModelView\DetalleFacturaViewModel.cs" />
+    <Compile Include="ModelView\EmailClienteViewModel.cs" />
+    <Compile Include="ModelView\EmailProveedorViewModel.cs" />
+    <Compile Include="ModelView\FacturaViewModel.cs" />
+    <Compile Include="ModelView\InventarioViewModel.cs" />
+    <Compile Include="ModelView\ProductoViewModel.cs" />
+    <Compile Include="ModelView\TelefonoClienteViewModel.cs" />
+    <Compile Include="ModelView\TelefonoProveedorViewModel.cs" />
+    <Compile Include="ModelView\TipoEmpaqueViewModel.cs" />
+    <Compile Include="Model\Categoria.cs" />
+    <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Compra.cs" />
+    <Compile Include="Model\DetalleCompra.cs" />
+    <Compile Include="Model\DetalleFactura.cs" />
+    <Compile Include="Model\EmailCliente.cs" />
+    <Compile Include="Model\EmailProveedor.cs" />
+    <Compile Include="Model\Factura.cs" />
+    <Compile Include="Model\Inventario.cs" />
+    <Compile Include="Model\Producto.cs" />
+    <Compile Include="Model\TelefonoCliente.cs" />
+    <Compile Include="Model\TelefonoProveedor.cs" />
+    <Compile Include="Model\TipoEmpaque.cs" />
+    <Compile Include="View\CategoriaView.xaml.cs">
+      <DependentUpon>CategoriaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClienteView.xaml.cs">
+      <DependentUpon>ClienteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CompraView.xaml.cs">
+      <DependentUpon>CompraView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DetalleCompraView.xaml.cs">
+      <DependentUpon>DetalleCompraView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DetalleFacturaViewModel.xaml.cs">
+      <DependentUpon>DetalleFacturaViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmailClienteView.xaml.cs">
+      <DependentUpon>EmailClienteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmailProveedor.xaml.cs">
+      <DependentUpon>EmailProveedor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FacturaView.xaml.cs">
+      <DependentUpon>FacturaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProveedorView.xaml.cs">
+      <DependentUpon>ProveedorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TelefonoClienteView.xaml.cs">
+      <DependentUpon>TelefonoClienteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TelefonoProveedorView.xaml.cs">
+      <DependentUpon>TelefonoProveedorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TipoEmpaqueView.xaml.cs">
+      <DependentUpon>TipoEmpaqueView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\CategoriaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClienteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CompraView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DetalleCompraView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DetalleFacturaViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EmailClienteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EmailProveedor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FacturaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProveedorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TelefonoClienteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TelefonoProveedorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TipoEmpaqueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModelView\ProveedorViewModel.cs" />
+    <Compile Include="Model\InventarioDataContext.cs" />
+    <Compile Include="Model\Proveedor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
