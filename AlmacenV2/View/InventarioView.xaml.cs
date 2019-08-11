@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlmacenV2.ModelView;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +16,14 @@ using System.Windows.Shapes;
 namespace AlmacenV2.View
 {
     /// <summary>
-    /// Lógica de interacción para DetalleFacturaViewModel.xaml
+    /// Lógica de interacción para InventarioView.xaml
     /// </summary>
-    public partial class DetalleFacturaViewModel : Window
+    public partial class InventarioView : Window
     {
-        public DetalleFacturaViewModel()
+        public InventarioView()
         {
             InitializeComponent();
+            this.DataContext = new InventarioViewModel();
         }
     }
 }

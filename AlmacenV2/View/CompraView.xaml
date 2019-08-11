@@ -20,20 +20,20 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="NumeroDocumento" Grid.Row="0" Grid.Column="0" />
-        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" Text="{Binding Nit}"/>
         <Label Content="CodigoProveedor" Grid.Row="1" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyRazonSocial}" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyCodigoProveedor}" Text="{Binding CodigoProveedor}"/>
         <Label Content="Fecha" Grid.Row="2" Grid.Column="0" />
-        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDireccion}" />
+        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyFecha}" Text="{Binding Fecha}"/>
         <Label Content="Total" Grid.Row="3" Grid.Column="0" />
-        <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPaginaWeb}" />
-       
+        <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyTotal}" Text="{Binding Total}" />
 
-        <DataGrid ItemsSource="{Binding Compras}" Grid.Row="4" Grid.Column="1">
+
+        <DataGrid ItemsSource="{Binding Compras}" Grid.Row="4" Grid.ColumnSpan="2">
 
         </DataGrid>
-        <StackPanel Grid.Row="5" Grid.Column="1">
-            <Button Content="Add"/>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>
             <Button Content="Save"/>

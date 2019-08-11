@@ -101,8 +101,8 @@
     <Compile Include="View\DetalleCompraView.xaml.cs">
       <DependentUpon>DetalleCompraView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DetalleFacturaViewModel.xaml.cs">
-      <DependentUpon>DetalleFacturaViewModel.xaml</DependentUpon>
+    <Compile Include="View\DetalleFacturaView.xaml.cs">
+      <DependentUpon>DetalleFacturaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EmailClienteView.xaml.cs">
       <DependentUpon>EmailClienteView.xaml</DependentUpon>
@@ -112,6 +112,12 @@
     </Compile>
     <Compile Include="View\FacturaView.xaml.cs">
       <DependentUpon>FacturaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InventarioView.xaml.cs">
+      <DependentUpon>InventarioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProductoView.xaml.cs">
+      <DependentUpon>ProductoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProveedorView.xaml.cs">
       <DependentUpon>ProveedorView.xaml</DependentUpon>
@@ -153,7 +159,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DetalleFacturaViewModel.xaml">
+    <Page Include="View\DetalleFacturaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -166,6 +172,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FacturaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InventarioView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProductoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

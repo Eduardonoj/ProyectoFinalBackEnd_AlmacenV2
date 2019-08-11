@@ -19,17 +19,17 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Dpi" Grid.Row="0" Grid.Column="0" />
-        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDpi}" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDpi}" Text="{Binding Dpi}"/>
         <Label Content="Nombre" Grid.Row="1" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNombre}" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNombre}" Text="{Binding Nombre}" />
         <Label Content="Direccion" Grid.Row="2" Grid.Column="0" />
-        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDireccion}" />
+        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDireccion}" Text="{Binding Direccion}" />
 
-        <DataGrid ItemsSource="{Binding Clientes}" Grid.Row="3" Grid.Column="1">
+        <DataGrid ItemsSource="{Binding Clientes}" Grid.Row="3" Grid.ColumnSpan="2">
 
         </DataGrid>
-        <StackPanel Grid.Row="4" Grid.Column="1">
-            <Button Content="Add"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>
             <Button Content="Save"/>

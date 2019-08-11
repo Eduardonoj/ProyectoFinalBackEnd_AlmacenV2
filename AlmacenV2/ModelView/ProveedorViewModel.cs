@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
 {
-    public class ProveedorViewModel : INotifyPropertyChanged
+    public class ProveedorViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
         private bool _IsReadOnlyNit = true;
@@ -17,8 +18,34 @@ namespace AlmacenV2.ModelView
         private bool _IsReadOnlyDireccion = true;
         private bool _IsReadOnlyPaginaWeb = true;
         private bool _IsReadOnlyContactoPrincipal = true;
+        private string _Nit;
+        private string _RazonSocial;
+        private string _Direccion;
+        private string _PaginaWeb;
+        private string _ContactoPrincipal;
 
         private ObservableCollection<Proveedor> _Proveedor;
+
+        private ProveedorViewModel _Instancia;
+
+        public ProveedorViewModel()
+        {
+            this.Titulo = "Proveedores:";
+            this.Instancia = this;
+        }
+
+
+        public ProveedorViewModel Instancia
+        {
+            get
+            {
+                return this._Instancia;
+            }
+            set
+            {
+                this._Instancia = value;
+            }
+        }
 
         public bool IsReadOnlyNit
         {
@@ -29,6 +56,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyNit = value;
+                NotificarCambio("IsReadOnlyNit");
             }
         }
 
@@ -41,6 +69,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyRazonSocial = value;
+                NotificarCambio("IsReadOnlyRazonSocial");
             }
         }
 
@@ -53,6 +82,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyDireccion = value;
+                NotificarCambio("IsReadOnlyDireccion");
             }
         }
 
@@ -65,6 +95,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyPaginaWeb = value;
+                NotificarCambio("IsReadOnlyPaginaWeb");
             }
         }
 
@@ -77,6 +108,68 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyContactoPrincipal = value;
+                NotificarCambio("IsReadOnlyContactoPrincipal");
+            }
+        }
+        public string Nit
+        {
+            get
+            {
+                return _Nit;
+            }
+            set
+            {
+                this._Nit = value;
+                NotificarCambio("Nit");
+            }
+        }
+
+        public string RazonSocial
+        {
+            get
+            {
+                return _RazonSocial;
+            }
+            set
+            {
+                this._RazonSocial = value;
+                NotificarCambio("RazonSocial");
+            }
+        }
+        public string Direccion
+        {
+            get
+            {
+                return _Direccion;
+            }
+            set
+            {
+                this._Direccion = value;
+                NotificarCambio("Direccion");
+            }
+        }
+        public string PaginaWeb
+        {
+            get
+            {
+                return _PaginaWeb;
+            }
+            set
+            {
+                this._PaginaWeb = value;
+                NotificarCambio("PaginaWeb");
+            }
+        }
+        public string ContactoPrincipal
+        {
+            get
+            {
+                return _ContactoPrincipal;
+            }
+            set
+            {
+                this._ContactoPrincipal = value;
+                NotificarCambio("ContactoPrincipal");
             }
         }
         public ObservableCollection<Proveedor> Proveedores
@@ -95,11 +188,36 @@ namespace AlmacenV2.ModelView
             }
             set { this._Proveedor = value; }
         }
-        public ProveedorViewModel()
-        {
-            this.Titulo = "Proveedores:";
-        }
+        
         public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotificarCambio(string propiedad)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propiedad));
+            }
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            if (parameter.Equals("Add"))
+            {
+                this.IsReadOnlyNit = false;
+                this.IsReadOnlyRazonSocial = false;
+                this.IsReadOnlyDireccion = false;
+                this.IsReadOnlyPaginaWeb = false;
+                this.IsReadOnlyContactoPrincipal = false;
+                
+            }
+        }
     }
 }

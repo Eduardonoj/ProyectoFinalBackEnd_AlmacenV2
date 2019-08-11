@@ -17,12 +17,12 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Descripcion" Grid.Row="0" Grid.Column="0" />
-        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDescripcion}" />
-        <DataGrid ItemsSource="{Binding Categorias}" Grid.Row="1" Grid.Column="2">
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDescripcion}" Text="{Binding Descripcion}" />
+        <DataGrid ItemsSource="{Binding Categorias}" Grid.Row="1" Grid.ColumnSpan="2">
             
         </DataGrid>
-        <StackPanel Grid.Row="2" Grid.Column="1">
-            <Button Content="Add"/>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>
             <Button Content="Save"/>

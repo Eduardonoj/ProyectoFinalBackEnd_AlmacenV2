@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
 {
-    public class DetalleFacturaViewModel : INotifyPropertyChanged
+    public class DetalleFacturaViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
         private ObservableCollection<DetalleFactura> _DetalleFactura;
@@ -19,6 +20,34 @@ namespace AlmacenV2.ModelView
         private bool _IsReadOnlyCantidad = true;
         private bool _IsReadOnlyPrecio = true;
         private bool _IsReadOnlyDescuento = true;
+        private string _NumeroFactura;
+        private string _CodigoProducto;
+        private string _Cantidad;
+        private string _Precio;
+        private string _Descuento;
+
+        private DetalleFacturaViewModel _Instancia;
+
+        public DetalleFacturaViewModel()
+        {
+            this.Titulo = "Detalle Facturas:";
+            this.Instancia = this;
+        }
+
+
+
+       
+        public DetalleFacturaViewModel Instancia
+        {
+            get
+            {
+                return this._Instancia;
+            }
+            set
+            {
+                this._Instancia = value;
+            }
+        }
 
         public bool IsReadOnlyNumeroFactura
         {
@@ -29,6 +58,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyNumeroFactura = value;
+                NotificarCambio("IsReadOnlyNumeroFactura");
             }
         }
 
@@ -41,6 +71,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyCodigoProducto = value;
+                NotificarCambio("IsReadOnlyCodigoProducto");
             }
         }
 
@@ -53,6 +84,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyCantidad = value;
+                NotificarCambio("IsReadOnlyCantidad");
             }
         }
 
@@ -65,6 +97,7 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyPrecio = value;
+                NotificarCambio("IsReadOnlyPrecio");
             }
         }
 
@@ -77,11 +110,69 @@ namespace AlmacenV2.ModelView
             set
             {
                 this._IsReadOnlyDescuento = value;
+                NotificarCambio("IsReadOnlyDescuento");
             }
         }
-
-       
-
+        public string NumeroFactura
+        {
+            get
+            {
+                return _NumeroFactura;
+            }
+            set
+            {
+                this._NumeroFactura = value;
+                NotificarCambio("NumeroFactura");
+            }
+        }
+       public string CodigoProducto
+        {
+            get
+            {
+                return _CodigoProducto;
+            }
+            set
+            {
+                this._CodigoProducto = value;
+                NotificarCambio("CodigoProducto");
+            }
+        }
+        public string Cantidad
+        {
+            get
+            {
+                return _Cantidad;
+            }
+            set
+            {
+                this._Cantidad = value;
+                NotificarCambio("Cantidad");
+            }
+        }
+        public string Precio
+        {
+            get
+            {
+                return _Precio;
+            }
+            set
+            {
+                this._Precio = value;
+                NotificarCambio("Precio");
+            }
+        }
+        public string Descuento
+        {
+            get
+            {
+                return _Descuento;
+            }
+            set
+            {
+                this._Descuento = value;
+                NotificarCambio("Descuento");
+            }
+        }
         public ObservableCollection<DetalleFactura> DetalleFacturas
         {
             get
@@ -98,12 +189,36 @@ namespace AlmacenV2.ModelView
             }
             set { this._DetalleFactura = value; }
         }
-        public DetalleFacturaViewModel()
-        {
-            this.Titulo = "Detalle Facturas:";
-        }
+       
         public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotificarCambio(string propiedad)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propiedad));
+            }
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            if (parameter.Equals("Add"))
+            {
+                this.IsReadOnlyNumeroFactura = false;
+                this.IsReadOnlyCodigoProducto = false;
+                this.IsReadOnlyCantidad = false;
+                this.IsReadOnlyPrecio = false;
+                this._IsReadOnlyDescuento = false;
+            }
+        }
     }
 
 }

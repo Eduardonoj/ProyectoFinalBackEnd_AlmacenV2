@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\EDUARDO\Documents\NETPROYECTOS\AlmacenV2\AlmacenV2\App.xaml
-132002562561
+15816370699
 
-47349665538
+491237728696
 16-1102749426
-MainWindow.xaml;View\CategoriaView.xaml;View\ClienteView.xaml;View\CompraView.xaml;View\DetalleCompraView.xaml;View\DetalleFacturaViewModel.xaml;View\EmailClienteView.xaml;View\EmailProveedor.xaml;View\FacturaView.xaml;View\ProveedorView.xaml;View\TelefonoClienteView.xaml;View\TelefonoProveedorView.xaml;View\TipoEmpaqueView.xaml;
+MainWindow.xaml;View\CategoriaView.xaml;View\ClienteView.xaml;View\CompraView.xaml;View\DetalleCompraView.xaml;View\DetalleFacturaView.xaml;View\EmailClienteView.xaml;View\EmailProveedor.xaml;View\FacturaView.xaml;View\InventarioView.xaml;View\ProductoView.xaml;View\ProveedorView.xaml;View\TelefonoClienteView.xaml;View\TelefonoProveedorView.xaml;View\TipoEmpaqueView.xaml;
 
 True
 

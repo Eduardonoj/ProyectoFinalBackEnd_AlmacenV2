@@ -21,21 +21,21 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Nit" Grid.Row="0" Grid.Column="0" />
-        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" Text="{Binding Nit}"/>
         <Label Content="RazonSocial" Grid.Row="1" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyRazonSocial}" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyRazonSocial}" Text="{Binding RazonSocial}"/>
         <Label Content="Direccion" Grid.Row="2" Grid.Column="0" />
-        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDireccion}" />
+        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDireccion}" Text="{Binding Direccion}"/>
         <Label Content="PaginaWeb" Grid.Row="3" Grid.Column="0" />
-        <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPaginaWeb}" />
+        <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPaginaWeb}" Text="{Binding PaginaWeb}"/>
         <Label Content="ContactoPrincipal" Grid.Row="4" Grid.Column="0" />
-        <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyContactoPrincipal}" />
+        <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyContactoPrincipal}" Text="{Binding Principal}"/>
 
-        <DataGrid ItemsSource="{Binding Proveedores}" Grid.Row="5" Grid.Column="1">
+        <DataGrid ItemsSource="{Binding Proveedores}" Grid.Row="5" Grid.ColumnSpan="2">
 
         </DataGrid>
-        <StackPanel Grid.Row="6" Grid.Column="1">
-            <Button Content="Add"/>
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>
             <Button Content="Save"/>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlmacenV2.ModelView;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace AlmacenV2.View
         public EmailProveedor()
         {
             InitializeComponent();
+            this.DataContext = new EmailProveedorViewModel();
         }
     }
 }
