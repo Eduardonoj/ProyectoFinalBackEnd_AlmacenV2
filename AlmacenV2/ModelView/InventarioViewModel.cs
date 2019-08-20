@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
@@ -13,6 +15,8 @@ namespace AlmacenV2.ModelView
     public class InventarioViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
+        private ObservableCollection<Inventario> _Inventario;
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyCodigoProducto = true;
         private bool _IsReadOnlyFecha = true;
         private bool _IsReadOnlyTipoRegistro = true;
@@ -25,9 +29,29 @@ namespace AlmacenV2.ModelView
         private string _Precio;
         private string _Entradas;
         private string _Salidas;
+        private Inventario _SeleccionarInventario;
+
+        public Inventario SeleccionarInventario
+        {
+            get { return this._SeleccionarInventario; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarInventario = value;
+                    this.CodigoProducto = value.CodigoProducto.ToString();
+                    this.Fecha = value.Fecha.ToString();
+                    this.TipoRegistro = value.TipoRegistro;
+                    this.Precio = value.Precio.ToString();
+                    this.Entradas = value.Entradas.ToString();
+                    this.Salidas = value.Salidas.ToString();
+                    NotificarCambio("SeleccionarInventario");
+                }
+            }
+        }
 
 
-        private ObservableCollection<Inventario> _Inventario;
+
 
         private InventarioViewModel _Instancia;
 
@@ -209,19 +233,20 @@ namespace AlmacenV2.ModelView
         {
             get
             {
-                if (this._Inventario == null) { 
-                    this._Inventario = new ObservableCollection<Inventario>();
-                foreach(Inventario elemento in db.Inventarios.ToList())
+                if (this._Inventario == null)
                 {
-                    this._Inventario.Add(elemento);
-                }
+                    this._Inventario = new ObservableCollection<Inventario>();
+                    foreach (Inventario elemento in db.Inventarios.ToList())
+                    {
+                        this._Inventario.Add(elemento);
+                    }
                 }
                 return this._Inventario;
             }
             set { this._Inventario = value; }
         }
-       
-        public string Titulo { get; set;}
+
+        public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotificarCambio(string propiedad)
@@ -248,6 +273,79 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyPrecio = false;
                 this.IsReadOnlyEntradas = false;
                 this.IsReadOnlySalidas = false;
+                this.accion = ACCION.NUEVO;
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        Inventario nuevo = new Inventario();
+                        nuevo.CodigoProducto = Convert.ToInt16(this.CodigoProducto);
+                        nuevo.Fecha = DateTime.Now;
+                        nuevo.TipoRegistro = this.TipoRegistro;
+                        nuevo.Precio = Convert.ToDecimal(this.Precio);
+                        nuevo.Entradas = Convert.ToInt16(this.Entradas);
+                        nuevo.Salidas = Convert.ToInt16(this.Salidas);
+                        db.Inventarios.Add(nuevo);
+                        db.SaveChanges();
+                        this.Inventarios.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+
+                            int posicion = this.Inventarios.IndexOf(this.SeleccionarInventario);
+                            var updateInventario = this.db.Inventarios.Find(this.SeleccionarInventario.CodigoInventario);
+                            updateInventario.CodigoProducto = Convert.ToInt16(this.CodigoProducto);
+                            updateInventario.Fecha = Convert.ToDateTime(this.Fecha);
+                            updateInventario.TipoRegistro = this.TipoRegistro;
+                            updateInventario.Precio = Convert.ToDecimal(this.Precio);
+                            updateInventario.Entradas = Convert.ToInt16(this.Entradas);
+                            updateInventario.Salidas = Convert.ToInt16(this.Salidas);
+                            this.db.Entry(updateInventario).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.Inventarios.RemoveAt(posicion);
+                            this.Inventarios.Insert(posicion, updateInventario);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+
+                }
+                
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarInventario != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+
+                            db.Inventarios.Remove(this.SeleccionarInventario);
+                            db.SaveChanges();
+                            this.Inventarios.Remove(this.SeleccionarInventario);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

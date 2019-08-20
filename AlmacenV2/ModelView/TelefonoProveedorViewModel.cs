@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
@@ -13,6 +15,8 @@ namespace AlmacenV2.ModelView
     public class TelefonoProveedorViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
+        public ObservableCollection<TelefonoProveedor> _TelefonoProveedor;
+        private ACCION accion = ACCION.NINGUNO;
 
         private bool _IsReadOnlyNumero = true;
         private bool _IsReadOnlyDescripcion = true;
@@ -20,8 +24,25 @@ namespace AlmacenV2.ModelView
         private string _Numero;
         private string _Descripcion;
         private string _CodigoProveedor;
+        private TelefonoProveedor _SeleccionarTelefonoProveedor;
 
-        public ObservableCollection<TelefonoProveedor> _TelefonoProveedor;
+        public TelefonoProveedor SeleccionarTelefonoProveedor
+        {
+            get { return this._SeleccionarTelefonoProveedor; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarTelefonoProveedor = value;
+                    this.Numero = value.Numero;
+                    this.Descripcion = value.Descripcion;
+                    this.CodigoProveedor = value.CodigoProveedor.ToString();
+                    NotificarCambio("SeleccionarTelefonProveedor");
+                }
+            }
+        }
+
+
 
         private TelefonoProveedorViewModel _Instancia;
 
@@ -123,7 +144,7 @@ namespace AlmacenV2.ModelView
         {
             get
             {
-                if(this._TelefonoProveedor == null)
+                if (this._TelefonoProveedor == null)
                 {
                     this._TelefonoProveedor = new ObservableCollection<TelefonoProveedor>();
                     foreach (TelefonoProveedor elemento in db.TelefonoProveedores.ToList())
@@ -161,9 +182,74 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyNumero = false;
                 this.IsReadOnlyDescripcion = false;
                 this.IsReadOnlyCodigoProveedor = false;
+                this.accion = ACCION.NUEVO;
+
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        TelefonoProveedor nuevo = new TelefonoProveedor();
+                        nuevo.Numero = this.Numero;
+                        nuevo.Descripcion = this.Descripcion;
+                        nuevo.CodigoProveedor = Convert.ToInt16(this.CodigoProveedor);
+                        db.TelefonoProveedores.Add(nuevo);
+                        db.SaveChanges();
+                        this.TelefonoProveedores.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.TelefonoProveedores.IndexOf(this.SeleccionarTelefonoProveedor);
+                            var updateTelefonoProveedor = this.db.TelefonoProveedores.Find(this.SeleccionarTelefonoProveedor.CodigoTelefono);
+                            updateTelefonoProveedor.Numero = this.Numero;
+                            updateTelefonoProveedor.Descripcion = this.Descripcion;
+                            updateTelefonoProveedor.CodigoProveedor = Convert.ToInt16(this.CodigoProveedor);
+                            this.db.Entry(updateTelefonoProveedor).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.TelefonoProveedores.RemoveAt(posicion);
+                            this.TelefonoProveedores.Insert(posicion, updateTelefonoProveedor);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+
+                }
                 
             }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarTelefonoProveedor != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
 
+                            db.TelefonoProveedores.Remove(this.SeleccionarTelefonoProveedor);
+                            db.SaveChanges();
+                            this.TelefonoProveedores.Remove(this.SeleccionarTelefonoProveedor);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

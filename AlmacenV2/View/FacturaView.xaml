@@ -14,7 +14,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
+            
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,15 +22,13 @@
         </Grid.ColumnDefinitions>
         <Label Content="Nit" Grid.Row="0" Grid.Column="0" />
         <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" Text="{Binding Nit}" />
-        <Label Content="Fecha" Grid.Row="1" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyFecha}" Text="{Binding Fecha}" />
         <Label Content="Total" Grid.Row="2" Grid.Column="0" />
-        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyTotal}" Text="{Binding Total}" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyTotal}" Text="{Binding Total}" />
 
-        <DataGrid ItemsSource="{Binding Facturas}" Grid.Row="3" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarFactura}" ItemsSource="{Binding Facturas}" Grid.Row="2" Grid.ColumnSpan="2">
 
         </DataGrid>
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>

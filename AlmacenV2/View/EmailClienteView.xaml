@@ -22,7 +22,7 @@
         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" Text="{Binding Nit}"/>
 
 
-        <DataGrid ItemsSource="{Binding EmailClientes}" Grid.Row="2" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarEmailCliente}" ItemsSource="{Binding EmailClientes}" Grid.Row="2" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">

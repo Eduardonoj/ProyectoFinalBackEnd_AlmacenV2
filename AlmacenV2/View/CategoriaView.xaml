@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <Label Content="Descripcion" Grid.Row="0" Grid.Column="0" />
         <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDescripcion}" Text="{Binding Descripcion}" />
-        <DataGrid ItemsSource="{Binding Categorias}" Grid.Row="1" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarCategoria}" ItemsSource="{Binding Categorias}" Grid.Row="1" Grid.ColumnSpan="2">
             
         </DataGrid>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">

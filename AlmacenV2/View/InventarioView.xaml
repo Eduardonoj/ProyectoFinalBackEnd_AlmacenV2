@@ -14,29 +14,28 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
+            
+           
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="CodigoProducto" Grid.Row="0" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyCodigoProducto}" Text="{Binding CodigoProducto}" />
-        <Label Content="Fecha" Grid.Row="1" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyFecha}" Text="{Binding Fecha}"/>
-        <Label Content="TipoRegistro" Grid.Row="2" Grid.Column="0" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyCodigoProducto}" Text="{Binding CodigoProducto}" />
+        <Label Content="TipoRegistro" Grid.Row="1" Grid.Column="0" />
         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyTipoRegistro}" Text="{Binding TipoRegistro}"/>
-        <Label Content="Precio" Grid.Row="3" Grid.Column="0" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPrecio}" Text="{Binding Precio}"/>
-        <Label Content="Entradas" Grid.Row="4" Grid.Column="0" />
+        <Label Content="Precio" Grid.Row="2" Grid.Column="0" />
+        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPrecio}" Text="{Binding Precio}"/>
+        <Label Content="Entradas" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyEntradas}" Text="{Binding Entradas}"/>
-        <Label Content="Salidas" Grid.Row="5" Grid.Column="0" />
+        <Label Content="Salidas" Grid.Row="4" Grid.Column="0" />
         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlySalidas}" Text="{Binding Salidas}"/>
 
-        <DataGrid ItemsSource="{Binding Inventarios}" Grid.Row="6" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarInventario}" ItemsSource="{Binding Inventarios}" Grid.Row="5" Grid.ColumnSpan="2">
 
         </DataGrid>
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal">
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
             <Button Content="Delete"/>
             <Button Content="Update"/>

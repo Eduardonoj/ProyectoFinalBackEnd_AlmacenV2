@@ -23,7 +23,7 @@
         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyCodigoProveedor}" Text="{Binding CodigoProveedor}"/>
 
 
-        <DataGrid ItemsSource="{Binding EmailProveedores}" Grid.Row="2" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarEmailProveedor}" ItemsSource="{Binding EmailProveedores}" Grid.Row="2" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">

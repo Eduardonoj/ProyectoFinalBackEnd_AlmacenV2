@@ -29,7 +29,7 @@
         <Label Content="Precio" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPrecio}" Text="{Binding Precio}"/>
 
-        <DataGrid ItemsSource="{Binding DetalleCompras}" Grid.Row="4" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarDetalleCompra}" ItemsSource="{Binding DetalleCompras}" Grid.Row="4" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal">

@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
@@ -13,13 +15,32 @@ namespace AlmacenV2.ModelView
     public class TelefonoClienteViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
+        private ObservableCollection<TelefonoCliente> _TelefonoCliente;
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyNumero = true;
         private bool _IsReadOnlyDescripcion = true;
         private bool _IsReadOnlyNit = true;
         private string _Numero;
         private string _Descripcion;
         private string _Nit;
-        private ObservableCollection<TelefonoCliente> _TelefonoCliente;
+        private TelefonoCliente _SeleccionarTelefonoCliente;
+
+        public TelefonoCliente SeleccionarTelefonoCliente
+        {
+            get { return this._SeleccionarTelefonoCliente; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarTelefonoCliente = value;
+                    this.Numero = value.Numero;
+                    this.Descripcion = value.Descripcion;
+                    this.Nit = value.Nit;
+                    NotificarCambio("SeleccionarTelefonCliente");
+                }
+            }
+        }
+
 
         private TelefonoClienteViewModel _Instancia;
 
@@ -118,21 +139,21 @@ namespace AlmacenV2.ModelView
         {
             get
             {
-                if(this._TelefonoCliente == null)
+                if (this._TelefonoCliente == null)
                 {
                     this._TelefonoCliente = new ObservableCollection<TelefonoCliente>();
-                    foreach(TelefonoCliente elemento in db.TelefonoClientes.ToList())
+                    foreach (TelefonoCliente elemento in db.TelefonoClientes.ToList())
                     {
                         this._TelefonoCliente.Add(elemento);
                     }
                 }
-                return this._TelefonoCliente; 
+                return this._TelefonoCliente;
             }
-            set { this._TelefonoCliente = value;}
+            set { this._TelefonoCliente = value; }
         }
 
-      
-        public string Titulo { get; set;}
+
+        public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotificarCambio(string propiedad)
@@ -157,7 +178,72 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyNumero = false;
                 this.IsReadOnlyDescripcion = false;
                 this.IsReadOnlyNit = false;
+                this.accion = ACCION.NUEVO;
+
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        TelefonoCliente nuevo = new TelefonoCliente();
+                        nuevo.Numero = this.Numero;
+                        nuevo.Descripcion = this.Descripcion;
+                        nuevo.Nit = this.Nit;
+                        db.TelefonoClientes.Add(nuevo);
+                        db.SaveChanges();
+                        this.TelefonoClientes.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.TelefonoClientes.IndexOf(this.SeleccionarTelefonoCliente);
+                            var updateTelefonoCliente = this.db.TelefonoClientes.Find(this.SeleccionarTelefonoCliente.CodigoTelefono);
+                            updateTelefonoCliente.Numero = this.Numero;
+                            updateTelefonoCliente.Descripcion = this.Descripcion;
+                            updateTelefonoCliente.Nit = this.Nit;
+                            this.db.Entry(updateTelefonoCliente).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.TelefonoClientes.RemoveAt(posicion);
+                            this.TelefonoClientes.Insert(posicion, updateTelefonoCliente);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+                }
                 
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarTelefonoCliente != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+
+                            db.TelefonoClientes.Remove(this.SeleccionarTelefonoCliente);
+                            db.SaveChanges();
+                            this.TelefonoClientes.Remove(this.SeleccionarTelefonoCliente);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

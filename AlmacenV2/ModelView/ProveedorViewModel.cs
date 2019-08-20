@@ -3,16 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
 {
+    enum ACCION
+    {
+        NINGUNO,
+        NUEVO,
+        ACTUALIZAR,
+        GUARDAR
+    };
     public class ProveedorViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
+        private ObservableCollection<Proveedor> _Proveedor;
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyNit = true;
         private bool _IsReadOnlyRazonSocial = true;
         private bool _IsReadOnlyDireccion = true;
@@ -23,8 +34,26 @@ namespace AlmacenV2.ModelView
         private string _Direccion;
         private string _PaginaWeb;
         private string _ContactoPrincipal;
+        private Proveedor _SeleccionarProveedor;
 
-        private ObservableCollection<Proveedor> _Proveedor;
+        public Proveedor SeleccionarProveedor
+        {
+            get { return this._SeleccionarProveedor; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarProveedor = value;
+                    this.Nit = value.Nit;
+                    this.RazonSocial = value.RazonSocial;
+                    this.Direccion = value.Direccion;
+                    this.PaginaWeb = value.PaginaWeb;
+                    this.ContactoPrincipal = value.ContactoPrincipal.ToString();
+                    NotificarCambio("SeleccionarProveedor");
+                }
+            }
+        }
+
 
         private ProveedorViewModel _Instancia;
 
@@ -188,7 +217,7 @@ namespace AlmacenV2.ModelView
             }
             set { this._Proveedor = value; }
         }
-        
+
         public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -216,7 +245,75 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyDireccion = false;
                 this.IsReadOnlyPaginaWeb = false;
                 this.IsReadOnlyContactoPrincipal = false;
+                this.accion = ACCION.NUEVO;
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        Proveedor nuevo = new Proveedor();
+                        nuevo.Nit = this.Nit;
+                        nuevo.RazonSocial = this.RazonSocial;
+                        nuevo.Direccion = this.Direccion;
+                        nuevo.PaginaWeb = this.PaginaWeb;
+                        nuevo.ContactoPrincipal = this.ContactoPrincipal;
+                        db.Proveedores.Add(nuevo);
+                        db.SaveChanges();
+                        this.Proveedores.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.Proveedores.IndexOf(this.SeleccionarProveedor);
+                            var updateProveedor = this.db.Proveedores.Find(this.SeleccionarProveedor.CodigoProveedor);
+                            updateProveedor.Nit = this.Nit;
+                            updateProveedor.RazonSocial = this.RazonSocial;
+                            updateProveedor.PaginaWeb = this.PaginaWeb;
+                            updateProveedor.ContactoPrincipal = this.ContactoPrincipal;
+                            this.db.Entry(updateProveedor).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.Proveedores.RemoveAt(posicion);
+                            this.Proveedores.Insert(posicion, updateProveedor);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+                }
                 
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarProveedor != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+
+                            db.Proveedores.Remove(this.SeleccionarProveedor);
+                            db.SaveChanges();
+                            this.Proveedores.Remove(this.SeleccionarProveedor);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

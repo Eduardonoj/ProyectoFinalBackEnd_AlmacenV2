@@ -29,7 +29,7 @@
         <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyNit}" Text="{Binding Nit}"/>
 
 
-        <DataGrid ItemsSource="{Binding TelefonoClientes}" Grid.Row="3" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarTelefonoCliente}" ItemsSource="{Binding TelefonoClientes}" Grid.Row="3" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">

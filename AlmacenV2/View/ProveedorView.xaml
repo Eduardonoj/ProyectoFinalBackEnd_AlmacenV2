@@ -29,16 +29,16 @@
         <Label Content="PaginaWeb" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyPaginaWeb}" Text="{Binding PaginaWeb}"/>
         <Label Content="ContactoPrincipal" Grid.Row="4" Grid.Column="0" />
-        <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyContactoPrincipal}" Text="{Binding Principal}"/>
+        <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyContactoPrincipal}" Text="{Binding ContactoPrincipal}"/>
 
-        <DataGrid ItemsSource="{Binding Proveedores}" Grid.Row="5" Grid.ColumnSpan="2">
+        <DataGrid  SelectedItem="{Binding SeleccionarProveedor}" ItemsSource="{Binding Proveedores}" Grid.Row="5" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button Content="Add" Command="{Binding Instancia}" CommandParameter="Add"/>
-            <Button Content="Delete"/>
+            <Button Content="Delete" Command="{Binding Instancia}" CommandParameter="Delete"/>
             <Button Content="Update"/>
-            <Button Content="Save"/>
+            <Button Content="Save" Command="{Binding Instancia}" CommandParameter="Save"/>
             <Button Content="Cancel"/>
         </StackPanel>
     </Grid>

@@ -9,7 +9,7 @@ namespace AlmacenV2.Model
     public class TipoEmpaque
     {
         public int CodigoEmpaque { get; set; }
-        public int Descripcion { get; set; }
+        public string Descripcion { get; set; }
 
         public virtual ICollection<Producto> Productos { get; set; }
     }

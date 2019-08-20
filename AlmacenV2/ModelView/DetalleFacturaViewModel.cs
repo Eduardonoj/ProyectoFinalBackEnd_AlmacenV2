@@ -3,18 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
 {
+   
     public class DetalleFacturaViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
         private ObservableCollection<DetalleFactura> _DetalleFactura;
-
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyNumeroFactura = true;
         private bool _IsReadOnlyCodigoProducto = true;
         private bool _IsReadOnlyCantidad = true;
@@ -25,6 +28,25 @@ namespace AlmacenV2.ModelView
         private string _Cantidad;
         private string _Precio;
         private string _Descuento;
+        private DetalleFactura _SeleccionarDetalleFactura;
+
+        public DetalleFactura SeleccionarDetalleFactura
+        {
+            get { return this._SeleccionarDetalleFactura; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarDetalleFactura = value;
+                    this.NumeroFactura = value.NumeroFactura.ToString();
+                    this.CodigoProducto = value.CodigoProducto.ToString();
+                    this.Cantidad = value.Cantidad.ToString();
+                    this.Precio = value.Precio.ToString();
+                    this.Descuento = value.Descuento.ToString();
+                    NotificarCambio("SeleccionarDetalleFactura");
+                }
+            }
+        }
 
         private DetalleFacturaViewModel _Instancia;
 
@@ -217,6 +239,73 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyCantidad = false;
                 this.IsReadOnlyPrecio = false;
                 this._IsReadOnlyDescuento = false;
+                this.accion = ACCION.NUEVO;
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+
+                        DetalleFactura nuevo = new DetalleFactura();
+                        nuevo.NumeroFactura = Convert.ToInt16(this.NumeroFactura);
+                        nuevo.CodigoProducto = Convert.ToInt16(this.CodigoProducto);
+                        nuevo.Cantidad = Convert.ToInt16(this.Cantidad);
+                        nuevo.Precio = Convert.ToDecimal(this.Precio);
+                        nuevo.Descuento = Convert.ToDecimal(this.Descuento);
+                        db.DetalleFacturas.Add(nuevo);
+                        db.SaveChanges();
+                        this.DetalleFacturas.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.DetalleFacturas.IndexOf(this.SeleccionarDetalleFactura);
+                            var updateDetalleFactura = this.db.DetalleFacturas.Find(this.SeleccionarDetalleFactura.CodigoDetalle);
+                            updateDetalleFactura.NumeroFactura = Convert.ToInt16(this.NumeroFactura);
+                            updateDetalleFactura.CodigoProducto = Convert.ToInt16(this.CodigoProducto);
+                            updateDetalleFactura.Cantidad = Convert.ToInt16(this.Cantidad);
+                            updateDetalleFactura.Precio = Convert.ToDecimal(this.Precio);
+                            updateDetalleFactura.Descuento = Convert.ToDecimal(this.Descuento);
+                            this.db.Entry(updateDetalleFactura).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.DetalleFacturas.RemoveAt(posicion);
+                            this.DetalleFacturas.Insert(posicion, updateDetalleFactura);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+                }
+                
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                if (respuesta == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+
+                        db.DetalleFacturas.Remove(this.SeleccionarDetalleFactura);
+                        db.SaveChanges();
+                        this.DetalleFacturas.Remove(this.SeleccionarDetalleFactura);
+
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                    MessageBox.Show("Registro eliminado correctamente!!!");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

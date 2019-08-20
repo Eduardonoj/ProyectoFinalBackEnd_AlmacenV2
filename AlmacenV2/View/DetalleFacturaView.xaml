@@ -31,7 +31,7 @@
         <Label Content="Descuento" Grid.Row="4" Grid.Column="0" />
         <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="{Binding IsReadOnlyDescuento}" Text="{Binding Descuento}"/>
 
-        <DataGrid ItemsSource="{Binding DetalleFacturas}" Grid.Row="5" Grid.ColumnSpan="2">
+        <DataGrid SelectedItem="{Binding SeleccionarDetalleFactura}" ItemsSource="{Binding DetalleFacturas}" Grid.Row="5" Grid.ColumnSpan="2">
 
         </DataGrid>
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">

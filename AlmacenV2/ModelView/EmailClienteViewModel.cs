@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
@@ -13,11 +15,28 @@ namespace AlmacenV2.ModelView
     public class EmailClienteViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
-
+        private ObservableCollection<EmailCliente> _EmailCliente;
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyEmail = true;
         private bool _IsReadOnlyNit = true;
         private string _Email;
         private string _Nit;
+        private EmailCliente _SeleccionarEmailCliente;
+
+        public EmailCliente SeleccionarEmailCliente
+        {
+            get { return this._SeleccionarEmailCliente; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarEmailCliente = value;
+                    this.Email = value.Email;
+                    this.Nit = value.Nit;
+                    NotificarCambio("SeleccionarEmailCliente");
+                }
+            }
+        }
 
         private EmailClienteViewModel _Instancia;
 
@@ -39,7 +58,7 @@ namespace AlmacenV2.ModelView
             }
         }
 
-        private ObservableCollection<EmailCliente> _EmailCliente;
+
 
         public bool IsReadOnlyEmail
         {
@@ -53,7 +72,7 @@ namespace AlmacenV2.ModelView
                 NotificarCambio("IsReadOnlyEmail");
             }
         }
-       
+
         public bool IsReadOnlyNit
         {
             get
@@ -101,7 +120,7 @@ namespace AlmacenV2.ModelView
                     {
                         this._EmailCliente.Add(elemento);
                     }
-                    
+
                 }
                 return this._EmailCliente;
             }
@@ -130,8 +149,70 @@ namespace AlmacenV2.ModelView
             {
                 this.IsReadOnlyEmail = false;
                 this.IsReadOnlyNit = false;
+                this.accion = ACCION.NUEVO;
             }
-           
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        EmailCliente nuevo = new EmailCliente();
+                        nuevo.Email = this.Email;
+                        nuevo.Nit = this.Nit;
+                        db.EmailClientes.Add(nuevo);
+                        db.SaveChanges();
+                        this.EmailClientes.Add(nuevo);
+                        MessageBox.Show("Registro Almcenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.EmailClientes.IndexOf(this.SeleccionarEmailCliente);
+                            var updateEmailCliente = this.db.EmailClientes.Find(this.SeleccionarEmailCliente.CodigoEmail);
+                            updateEmailCliente.Email = this.Email;
+                            updateEmailCliente.Nit = this.Nit;
+                            this.db.Entry(updateEmailCliente).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.EmailClientes.RemoveAt(posicion);
+                            this.EmailClientes.Insert(posicion, updateEmailCliente);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+                }
+                
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarEmailCliente != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+
+                            db.EmailClientes.Remove(this.SeleccionarEmailCliente);
+                            db.SaveChanges();
+                            this.EmailClientes.Remove(this.SeleccionarEmailCliente);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

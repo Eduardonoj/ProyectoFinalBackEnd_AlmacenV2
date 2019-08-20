@@ -12,7 +12,7 @@ namespace AlmacenV2.Model
         public int NumeroDocumento { get; set; }
         public int CodigoProveedor { get; set;}
         public DateTime Fecha { get; set; }
-        public decimal Total { get; set;}
+        public Decimal Total { get; set;}
 
         public virtual Proveedor Proveedor { get; set; }
 

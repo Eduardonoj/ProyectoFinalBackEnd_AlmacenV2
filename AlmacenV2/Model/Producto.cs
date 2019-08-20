@@ -16,7 +16,7 @@ namespace AlmacenV2.Model
         public decimal PrecioPorDocena { get;set;}
         public decimal PrecioPorMayor { get; set; }
         public int Existencia { get; set; }
-        public int Imagen { get; set; }
+        public string Imagen { get; set; }
 
         public virtual Categoria Categoria { get; set; }
         public virtual TipoEmpaque TipoEmpaque { get; set;}

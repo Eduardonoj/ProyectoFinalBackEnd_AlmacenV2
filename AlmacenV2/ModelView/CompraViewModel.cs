@@ -3,16 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AlmacenV2.ModelView
 {
+    
     class CompraViewModel : INotifyPropertyChanged, ICommand
     {
         private InventarioDataContext db = new InventarioDataContext();
+        private ObservableCollection<Compra> _Compra;
+        private ACCION accion = ACCION.NINGUNO;
         private bool _IsReadOnlyNumeroDocumento = true;
         private bool _IsReadOnlyCodigoProveedor = true;
         private bool _IsReadOnlyFecha = true;
@@ -21,6 +26,24 @@ namespace AlmacenV2.ModelView
         private string _CodigoProveedor;
         private string _Fecha;
         private string _Total;
+        private Compra _SeleccionarCompra;
+
+        public Compra SeleccionarCompra
+        {
+            get { return this._SeleccionarCompra; }
+            set
+            {
+                if (value != null)
+                {
+                    this._SeleccionarCompra = value;
+                    this.NumeroDocumento = value.NumeroDocumento.ToString();
+                    this.CodigoProveedor = value.CodigoProveedor.ToString();
+                    this.Fecha = value.Fecha.ToString();
+                    this.Total = value.Total.ToString();
+                    NotificarCambio("SeleccionarCompra");
+                }
+            }
+        }
         private CompraViewModel _Instancia;
 
         public CompraViewModel()
@@ -31,7 +54,7 @@ namespace AlmacenV2.ModelView
 
 
 
-        private ObservableCollection<Compra> _Compra;
+
 
         public CompraViewModel Instancia
         {
@@ -165,7 +188,7 @@ namespace AlmacenV2.ModelView
             }
             set { this._Compra = value; }
         }
-      
+
         public string Titulo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotificarCambio(string propiedad)
@@ -191,6 +214,74 @@ namespace AlmacenV2.ModelView
                 this.IsReadOnlyCodigoProveedor = false;
                 this.IsReadOnlyFecha = false;
                 this.IsReadOnlyTotal = false;
+                this.accion = ACCION.NUEVO;
+            }
+            if (parameter.Equals("Save"))
+            {
+                switch (this.accion)
+                {
+                    case ACCION.NUEVO:
+                        Compra nuevo = new Compra();
+                        nuevo.NumeroDocumento = Convert.ToInt32(this.NumeroDocumento);
+                        nuevo.CodigoProveedor = Convert.ToInt32(this.CodigoProveedor);
+                        nuevo.Fecha = DateTime.Now;
+                        this.Total = this.Total;
+                        db.Compras.Add(nuevo);
+                        db.SaveChanges();
+                        this.Compras.Add(nuevo);
+                        MessageBox.Show("Registro Almacenado");
+                        break;
+                    case ACCION.ACTUALIZAR:
+                        try
+                        {
+                            int posicion = this.Compras.IndexOf(this.SeleccionarCompra);
+                            var updateCompra = this.db.Compras.Find(this.SeleccionarCompra.IdCompra);
+                            updateCompra.NumeroDocumento = Convert.ToInt16(this.NumeroDocumento);
+                            updateCompra.CodigoProveedor = Convert.ToInt16(this.CodigoProveedor);
+                            updateCompra.Fecha = Convert.ToDateTime(this.Fecha);
+                            updateCompra.Total = Convert.ToInt32(this.Total);                           
+                            this.db.Entry(updateCompra).State = EntityState.Modified;
+                            this.db.SaveChanges();
+                            this.Compras.RemoveAt(posicion);
+                            this.Compras.Insert(posicion, updateCompra);
+                            MessageBox.Show("Registro Actualizado!!!");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        break;
+                }
+                
+
+            }
+            else if (parameter.Equals("Delete"))
+            {
+                if (this.SeleccionarCompra != null)
+                {
+                    var respuesta = MessageBox.Show("Esta seguro de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo);
+                    if (respuesta == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+
+                            db.Compras.Remove(this.SeleccionarCompra);
+                            db.SaveChanges();
+                            this.Compras.Remove(this.SeleccionarCompra);
+
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message);
+                        }
+                        MessageBox.Show("Registro eliminado correctamente!!!");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un registro", "Eliminar", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
